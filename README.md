@@ -8,3 +8,4 @@ Using Apache Spark to store the data and kafka to handle streamin gof new data.
 
 Run `bash start.sh` (note that if you are on windows you can run it on a git bash terminal)
 
+If running for the first time run `bash start.sh download-data` in order to download the datasets we're going to be using.
