@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Running download_data.windows.sh"
+
 data_folder_path="data"
 
 # If folder does not exist, create it
