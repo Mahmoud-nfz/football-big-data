@@ -7,7 +7,7 @@ def main():
         .getOrCreate()
 
     # Read the CSV file into a DataFrame
-    df = spark.read.csv('/opt/spark/work-dir/mount/data/ginf.csv', header=True, inferSchema=True)
+    df = spark.read.csv('/opt/spark/work-dir/mount/data/football-events/ginf.csv', header=True, inferSchema=True)
 
     # Show the DataFrame contents
     df.show()
