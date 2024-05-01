@@ -9,7 +9,6 @@ if [[ "$1" == "download-data" ]]; then
         msys*|cygwin*)    ./scripts/download_data.windows.sh ;;
         *)        echo "Unsupported OS: $OSTYPE" ;;
     esac
-    ./scripts/download_data.sh
 fi
 
 echo "Starting spark docker container mounted to $(pwd)"

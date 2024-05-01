@@ -1,1 +1,6 @@
-data
+# Ignore everything in the data folder
+data/*
+
+# But do not ignore Pipfile and Pipfile.lock
+!data/Pipfile
+!data/Pipfile.lock

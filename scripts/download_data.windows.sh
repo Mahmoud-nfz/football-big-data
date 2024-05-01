@@ -2,7 +2,7 @@
 
 echo "Running download_data.windows.sh"
 
-data_folder_path="data"
+data_folder_path="."
 
 # If folder does not exist, create it
 if [ ! -d "$data_folder_path" ]; then
@@ -31,8 +31,9 @@ then
     exit 1
 fi
 
+
 # Check and install Pipenv if not already installed
-if [ ! -f "$PIPENV_PATH" ]; then
+if [ ! -f "$PIPENV_PATH" ] && [ ! command -v pipenv &> /dev/null ]; then
     echo "Pipenv is not installed. Installing Pipenv..."
     pip install --user pipenv
 
@@ -42,6 +43,12 @@ if [ ! -f "$PIPENV_PATH" ]; then
         exit 1
     fi
 fi
+
+if command -v pipenv &> /dev/null; then
+    PIPENV_PATH=pipenv
+fi
+
+cd data 
 
 # Install dependencies using pipenv
 $PIPENV_PATH install
