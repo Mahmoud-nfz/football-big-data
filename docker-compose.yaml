@@ -1,0 +1,5 @@
+services:
+  spark:
+    image: apache/spark-py
+    volumes:
+      - .:/opt/spark/work-dir/mount
