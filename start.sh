@@ -12,4 +12,4 @@ if [[ "$1" == "download-data" ]]; then
 fi
 
 echo "Starting spark docker container mounted to $(pwd)"
-docker run -d -it -v "/$(pwd):/opt/spark/work-dir/mount" apache/spark-py bash
+docker compose up -d
