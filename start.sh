@@ -5,9 +5,9 @@ if [[ "$1" == "download-data" ]]; then
     echo "Download data option selected. Running data download script."
     # Assuming the download script is named download_data.sh and located in the current directory
     case "$OSTYPE" in
-        linux*)   ./scripts/download_data.linux.sh ;;
-        msys*|cygwin*)    ./scripts/download_data.windows.sh ;;
-        *)        echo "Unsupported OS: $OSTYPE" ;;
+        linux*) ./scripts/download_data.linux.sh ;;
+        msys* | cygwin*) ./scripts/download_data.windows.sh ;;
+        *) echo "Unsupported OS: $OSTYPE" ;;
     esac
 fi
 

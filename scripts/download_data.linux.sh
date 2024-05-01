@@ -24,6 +24,9 @@ then
     exit 1
 fi
 
+# Configure pipenv to use latest python3 version
+pipenv --python "$(which python3)"
+
 # Install dependencies using pipenv
 echo "Installing dependencies using Pipenv..."
 pipenv install
@@ -43,6 +46,6 @@ chmod 600 "$HOME/.kaggle/kaggle.json"
 
 # Activate the virtual environment and download the dataset
 echo "Downloading dataset using Pipenv into $data_folder_path..."
-$PIPENV_PATH run kaggle datasets download -d secareanualin/football-events -p "$data_folder_path/football-events" --unzip
+pipenv run kaggle datasets download -d secareanualin/football-events -p "$data_folder_path/football-events" --unzip
 
 echo "Dataset downloaded and extracted to $data_folder_path."
