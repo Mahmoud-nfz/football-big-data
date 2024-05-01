@@ -8,17 +8,18 @@ data_folder_path="data"
 if [ ! -d "$data_folder_path" ]; then
     mkdir "$data_folder_path"
 fi
+
+cd $data_folder_path
+
 # Check if Python is installed
-if ! command -v python3 &> /dev/null
-then
+if ! command -v python3 &>/dev/null; then
     echo "Python could not be found, please install Python or add it to your PATH."
     exit 1
 fi
 
 # Check and install Pipenv if not already installed
 
-if ! command -v pipenv &> /dev/null
-then
+if ! command -v pipenv &>/dev/null; then
     echo "Pipenv was not found, currently installing pipenv..."
     pip install --user pipenv
     exit 1
@@ -45,7 +46,7 @@ fi
 chmod 600 "$HOME/.kaggle/kaggle.json"
 
 # Activate the virtual environment and download the dataset
-echo "Downloading dataset using Pipenv into $data_folder_path..."
-pipenv run kaggle datasets download -d secareanualin/football-events -p "$data_folder_path/football-events" --unzip
+echo "Downloading dataset using Pipenv into $(pwd)..."
+pipenv run kaggle datasets download -d secareanualin/football-events -p "$(pwd)/football-events" --unzip
 
-echo "Dataset downloaded and extracted to $data_folder_path."
+echo "Dataset downloaded and extracted to $(pwd)."
