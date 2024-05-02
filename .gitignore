@@ -4,3 +4,7 @@ data/*
 # But do not ignore Pipfile and Pipfile.lock
 !data/Pipfile
 !data/Pipfile.lock
+
+# Env files
+**/*.env*
+!**/.env.example
