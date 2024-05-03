@@ -1,9 +1,13 @@
 services:
   spark:
+    profiles:
+      - main
     image: apache/spark-py
     volumes:
       - .:/opt/spark/work-dir/mount
-  broker:
+  kafka-broker:
+    profiles:
+      - main
     image: apache/kafka:3.7.0
     ports:
       - 9092:9092
@@ -17,3 +21,11 @@ services:
       KAFKA_NODE_ID: 1
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@broker:29093"
       KAFKA_LISTENERS: "PLAINTEXT_HOST://:9092,SSL://:9093,CONTROLLER://:29093,PLAINTEXT://:19092"
+
+  datasets-downloader:
+    profiles:
+      - datasets
+    build: ./data
+    volumes:
+      - ./data:/data  # Mount host directory `./data` to container's `/data`
+      - $HOME/.kaggle:/root/.kaggle:ro  # Mount Kaggle credentials as read-only
