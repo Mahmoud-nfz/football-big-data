@@ -11,7 +11,7 @@ Using Apache Spark to store the data and kafka to handle streamin gof new data.
 If running for the first time run `bash start.sh download-data` in order to download the datasets we're going to be using.
 
 
-- Run `docker ps` to find the id of the container and then run `docker exec -it \<container-id> bash` to launch a shell inside the container.
+- Run `docker compose run spark bash` to launch a shell inside the container.
 
 
 #### All of the following commands will be run inside the container
