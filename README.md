@@ -16,4 +16,4 @@ If running for the first time run `bash start.sh download-data` in order to down
 
 #### All of the following commands will be run inside the container
 
-- Run `../bin/spark-submit mount/main.py` and it will load the `ginf.csv` file into spark and then run an sql query on it.
+- Run `../bin/spark-submit mount/spark/main.py` and it will load the `ginf.csv` file into spark and then run an sql query on it.

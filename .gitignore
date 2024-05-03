@@ -2,5 +2,5 @@
 data/*
 
 # But do not ignore Pipfile and Pipfile.lock
-!data/Pipfile
-!data/Pipfile.lock
+!data/Dockerfile
+!data/main.py

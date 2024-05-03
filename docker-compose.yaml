@@ -1,5 +1,15 @@
 services:
   spark:
+    profiles:
+      - main
     image: apache/spark-py
     volumes:
       - .:/opt/spark/work-dir/mount
+
+  datasets-downloader:
+    profiles:
+      - datasets
+    build: ./data
+    volumes:
+      - ./data:/data  # Mount host directory `./data` to container's `/data`
+      - $HOME/.kaggle:/root/.kaggle:ro  # Mount Kaggle credentials as read-only
