@@ -1,6 +1,12 @@
 # Ignore everything in the data folder
 data/*
 
-# But do not ignore Pipfile and Pipfile.lock
+# But do not ignore these
 !data/Dockerfile
 !data/main.py
+
+# Env files
+**/*.env*
+!**/.env.example
+
+**/__pycache__/

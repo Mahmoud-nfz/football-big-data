@@ -14,10 +14,10 @@ if [[ "$1" == "download-data" ]]; then
 
 
     echo "Starting spark docker container mounted to $(pwd)"
-    docker-compose --profile main --profile datasets up --build
+    docker compose --profile datasets up --build
 
 else
     
     echo "Download data option selected. Running data download script."
-    docker-compose --profile main up --build
+    docker compose up --build
 fi
