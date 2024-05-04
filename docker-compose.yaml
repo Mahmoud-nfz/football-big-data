@@ -1,14 +1,19 @@
 services:
+  scraper:
+    build: ./scraper
+    env_file: 
+      - ./scraper/.env
+    depends_on:
+      - kafka-broker
+    networks:
+      - kafka-net
+
   spark:
-    profiles:
-      - main
     image: apache/spark-py
     volumes:
       - .:/opt/spark/work-dir/mount
       
   kafka-broker:
-    profiles:
-      - main
     image: apache/kafka:3.7.0
     ports:
       - 9092:9092
@@ -20,6 +25,8 @@ services:
       KAFKA_NODE_ID: 1
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-broker:29093"
       KAFKA_LISTENERS: "PLAINTEXT_HOST://:9092,SSL://:9093,CONTROLLER://:29093,PLAINTEXT://:19092"
+    networks:
+      - kafka-net
 
   datasets-downloader:
     profiles:
@@ -28,3 +35,7 @@ services:
     volumes:
       - ./data:/data  # Mount host directory `./data` to container's `/data`
       - $HOME/.kaggle:/root/.kaggle:ro  # Mount Kaggle credentials as read-only
+
+networks:
+  kafka-net:
+    driver: bridge
