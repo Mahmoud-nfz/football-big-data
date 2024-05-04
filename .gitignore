@@ -8,3 +8,5 @@ data/*
 # Env files
 **/*.env*
 !**/.env.example
+
+**/__pycache__/
