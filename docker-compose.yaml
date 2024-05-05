@@ -1,5 +1,14 @@
 services:
+  spark-builder:
+    build:
+      context: ./spark
+      dockerfile: Dockerfile.builder
+    volumes:
+      - ./spark:/opt/spark/work-dir
+      
   spark:
+    depends_on: 
+      - spark-builder
     image: apache/spark-py
     volumes:
       - ./spark:/opt/spark/work-dir/spark-apps
