@@ -2,7 +2,10 @@ services:
   spark:
     image: apache/spark-py
     volumes:
-      - .:/opt/spark/work-dir/mount
+      - ./spark:/opt/spark/work-dir/spark-apps
+      - ./data:/opt/spark/work-dir/data
+    command: ["/opt/spark/bin/spark-submit", "--py-files", "/opt/spark/work-dir/spark-apps/src.zip", "/opt/spark/work-dir/spark-apps/main.py"]
+
 
   scraper:
     build: ./scraper
