@@ -1,5 +1,6 @@
 import sched
 import time
+from src.db.init import init_db
 from src.batch.goal_scoring_players import goal_scoring_players
 from src.batch.goal_scoring_teams import goal_scoring_teams
 from src.batch.gpg_teams import gpg_teams
@@ -19,6 +20,8 @@ def periodic(scheduler, interval, action, actionargs=()):
 
 
 def main():
+    init_db()
+    
     # Create a scheduler object
     scheduler = sched.scheduler(time.time, time.sleep)
 

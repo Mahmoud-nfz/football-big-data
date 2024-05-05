@@ -1,4 +1,4 @@
-from src.persistence.output import save_output
+from src.db.output import save_output
 from src.data.load import load_data
 from src.spark.context import create_context
 from src.data.columns import events_cols as cols

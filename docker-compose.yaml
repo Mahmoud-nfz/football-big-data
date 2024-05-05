@@ -1,11 +1,20 @@
 services:
+  rethinkdb:
+    image: rethinkdb
+    ports:
+      - "8080:8080"
+      - "28015:28015"
+      - "29015:29015"
+    networks:
+      - rethinkdb-net
+
   spark-builder:
     build:
       context: ./spark
       dockerfile: Dockerfile.builder
     volumes:
       - ./spark:/opt/spark/work-dir
-      
+
   spark:
     depends_on: 
       - spark-builder
@@ -13,7 +22,9 @@ services:
     volumes:
       - ./spark:/opt/spark/work-dir/spark-apps
       - ./data:/opt/spark/work-dir/data
-    command: ["/opt/spark/bin/spark-submit", "--py-files", "/opt/spark/work-dir/spark-apps/src.zip", "/opt/spark/work-dir/spark-apps/main.py"]
+    command: ["/opt/spark/bin/spark-submit", "--py-files", "/opt/spark/work-dir/spark-apps/src.zip,/opt/spark/work-dir/spark-apps/rethinkdb.zip", "/opt/spark/work-dir/spark-apps/main.py"]
+    networks:
+      - rethinkdb-net
 
 
   scraper:
@@ -50,4 +61,6 @@ services:
 
 networks:
   kafka-net:
+    driver: bridge
+  rethinkdb-net:
     driver: bridge
