@@ -1,5 +1,6 @@
 import sched
 import time
+from src.db.RDBM import RethinkDBManager
 from src.batch.goal_scoring_players import goal_scoring_players
 from src.batch.goal_scoring_teams import goal_scoring_teams
 from src.batch.gpg_teams import gpg_teams
@@ -19,6 +20,9 @@ def periodic(scheduler, interval, action, actionargs=()):
 
 
 def main():
+    rdbm = RethinkDBManager()
+    rdbm.init()
+    
     # Create a scheduler object
     scheduler = sched.scheduler(time.time, time.sleep)
 
