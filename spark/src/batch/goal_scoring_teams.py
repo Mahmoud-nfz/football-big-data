@@ -1,35 +1,21 @@
-from pyspark import SparkConf, SparkContext
+from src.persistence.output import save_output
+from src.data.load import load_data
+from src.spark.context import create_context
+from src.data.columns import events_cols as cols
+
 
 def goal_scoring_teams():
-
-    # Setting up the Spark configuration and context
-    conf = SparkConf().setMaster("local").setAppName("Top Goal Scorers")
-    sc = SparkContext(conf=conf)
-
-    # Load the CSV data and filter out the header
-    data = sc.textFile("/opt/spark/work-dir/data/football-events/events.csv")
-    header = data.first()  # capture the header line
-    data = data.filter(lambda row: row != header)  # filter out the header
-
-    # Process the data
-    data = data.map(lambda line: line.split(","))
-    goals = data.filter(lambda x: x[16] == "1")  # Filtering only the rows where is_goal is 1
-    team_goals = goals.map(lambda x: (x[9], 1)) # Mapping team names to a count of 1
+    sc = create_context("Top Goal Scoring Teams")
+    
+    data = load_data(sc, "events.csv")
+    
+    goals = data.filter(lambda x: x[cols["is_goal"]] == "1")
+    team_goals = goals.map(lambda x: (x[cols["event_team"]], 1)) # Mapping team names to a count of 1
     goal_counts = team_goals.reduceByKey(lambda a, b: a + b)
 
     # Retrieve the top 10 goal scorers
     top_scorers = goal_counts.takeOrdered(10, key=lambda x: -x[1])
 
-    # Output the top 10 goal scorers to console
-    for scorer in top_scorers:
-        print(f"{scorer[0]}: {scorer[1]} goals")
+    save_output(top_scorers, lambda x: f"{x[0]}: {x[1]} goals", "output_gst.txt", "Top 10 Goal Scoring Teams")            
 
-    # Write the output to a file
-    with open("/opt/spark/work-dir/data/output_gst.txt", "w") as file:
-        file.write("Top 10 Goal Scorers:\n")
-        
-        for scorer in top_scorers:
-            file.write(f"{scorer[0]}: {scorer[1]} goals\n")
-
-    # Stop the Spark context
     sc.stop()
