@@ -2,10 +2,10 @@
 tables = [
     {
         'name': 'players',
-        'primary_key': 'id'
+        'primary_key': 'name'
     },
     {
         'name': 'teams',
-        'primary_key': 'id'
+        'primary_key': 'name'
     }
 ]
