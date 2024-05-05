@@ -9,4 +9,6 @@ data/*
 **/*.env*
 !**/.env.example
 
+*.zip
+
 **/__pycache__/
