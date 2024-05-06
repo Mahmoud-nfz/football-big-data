@@ -1,4 +1,53 @@
 services:
+  namenode:
+    build:
+      context: ./hadoop
+    hostname: namenode
+    command: ["./start.sh"]
+    ports:
+      - 9870:9870
+    environment:
+      ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
+    volumes:
+      - ./hadoop/config:/opt/hadoop/etc/hadoop
+      - ./data/football-events:/opt/hadoop/data
+      - ./hadoop/scripts/start-namenode.sh:/opt/hadoop/start.sh
+    networks:
+      - hadoop-net
+
+  datanode:
+    depends_on:
+      - namenode
+    build:
+      context: ./hadoop
+    command: ["hdfs", "datanode"]
+    volumes:
+      - ./hadoop/config:/opt/hadoop/etc/hadoop
+    networks:
+      - hadoop-net
+
+  resourcemanager:
+    build:
+      context: ./hadoop
+    hostname: resourcemanager
+    command: ["yarn", "resourcemanager"]
+    ports:
+      - 8088:8088
+    volumes:
+      - ./hadoop/config:/opt/hadoop/etc/hadoop
+      - ./test.sh:/opt/test.sh
+    networks:
+      - hadoop-net
+
+  nodemanager:
+    build:
+      context: ./hadoop
+    command: ["yarn", "nodemanager"]
+    volumes:
+      - ./hadoop/config:/opt/hadoop/etc/hadoop
+    networks:
+      - hadoop-net
+
   rethinkdb:
     image: rethinkdb
     ports:
@@ -16,20 +65,38 @@ services:
       - ./spark:/opt/spark/work-dir
 
   spark:
-    depends_on: 
+    depends_on:
       - spark-builder
+      - namenode
+      - datanode
     image: apache/spark-py
+    environment:
+      YARN_CONF_DIR: "/opt/spark/conf"
+      PYSPARK_PYTHON: "python3.10"
     volumes:
       - ./spark:/opt/spark/work-dir/spark-apps
       - ./data:/opt/spark/work-dir/data
-    command: ["/opt/spark/bin/spark-submit", "--py-files", "/opt/spark/work-dir/spark-apps/src.zip,/opt/spark/work-dir/spark-apps/rethinkdb.zip", "/opt/spark/work-dir/spark-apps/main.py"]
+      - ./hadoop/config:/opt/spark/conf
+    ports:
+      - "4040:4040"
+    command:
+      [
+        "/opt/spark/bin/spark-submit",
+        "--master",
+        "yarn",
+        "--deploy-mode",
+        "client",
+        "--py-files",
+        "/opt/spark/work-dir/spark-apps/src.zip,/opt/spark/work-dir/spark-apps/rethinkdb.zip",
+        "/opt/spark/work-dir/spark-apps/main.py",
+      ]
     networks:
       - rethinkdb-net
-
+      - hadoop-net
 
   scraper:
     build: ./scraper
-    env_file: 
+    env_file:
       - ./scraper/.env
     depends_on:
       - kafka-broker
@@ -56,11 +123,13 @@ services:
       - datasets
     build: ./data
     volumes:
-      - ./data:/data  # Mount host directory `./data` to container's `/data`
-      - $HOME/.kaggle:/root/.kaggle:ro  # Mount Kaggle credentials as read-only
+      - ./data:/data # Mount host directory `./data` to container's `/data`
+      - $HOME/.kaggle:/root/.kaggle:ro # Mount Kaggle credentials as read-only
 
 networks:
   kafka-net:
     driver: bridge
   rethinkdb-net:
+    driver: bridge
+  hadoop-net:
     driver: bridge

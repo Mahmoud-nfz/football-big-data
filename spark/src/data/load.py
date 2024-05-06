@@ -5,7 +5,7 @@ def load_data(sc: SparkContext, data: str):
     if data not in ["events.csv", "ginf.csv"]:
         raise ValueError("Invalid data file")
     
-    data_rdd = sc.textFile("/opt/spark/work-dir/data/football-events/"+data)
+    data_rdd = sc.textFile("/data/football-events/" + data)
     
     # Parse CSV rows using the csv module
     parsed_data = data_rdd.mapPartitions(lambda x: csv.reader(x))
