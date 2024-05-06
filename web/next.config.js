@@ -5,6 +5,17 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  reactStrictMode: true,
+  swcMinify: true,
+  output: "standalone",
+  images:{
+    remotePatterns: [
+      {
+        hostname: "*"
+      }
+    ]
+  }
+};
 
 export default config;
