@@ -12,4 +12,9 @@ export interface Player {
   age: number;
   value: string;
   description: string;
+  updatedAt: string;
+  goals: number;
+  assists: number;
+  matches: number;
+  matchesWon: number;
 }
