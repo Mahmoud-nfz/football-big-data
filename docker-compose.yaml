@@ -3,7 +3,7 @@ services:
     build:
       context: ./hadoop
     hostname: namenode
-    command: ["./start.sh"]
+    command: ["bash", "-c", "./start.sh"]
     ports:
       - 9870:9870
     environment:
