@@ -1,4 +1,14 @@
 services:
+  web:
+    platform: "linux/amd64"
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    image: t3-app
+
   namenode:
     build:
       context: ./hadoop

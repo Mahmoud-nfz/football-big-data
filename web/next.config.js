@@ -6,6 +6,10 @@ await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
 const config = {
+  eslint: {
+    // Ignores ESLint during production builds and client-side transitions
+    ignoreDuringBuilds: true,
+  },
   reactStrictMode: true,
   swcMinify: true,
   output: "standalone",
