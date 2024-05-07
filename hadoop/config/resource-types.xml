@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<configuration>
+  <resources>
+    <resourceType name="GPU" units="NONE">
+      <schedulerInclude>true</schedulerInclude>
+      <yarnInclude>true</yarnInclude>
+    </resourceType>
+    <resourceType name="FPGA" units="NONE">
+      <schedulerInclude>true</schedulerInclude>
+      <yarnInclude>true</yarnInclude>
+    </resourceType>
+  </resources>
+</configuration>
