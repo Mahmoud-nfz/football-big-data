@@ -12,7 +12,13 @@ while ! hdfs dfs -mkdir -p /data/football-events; do
 done
 echo "Created /data/football-events hdfs dir"
 hdfs dfs -put /opt/hadoop/data/* /data/football-events
-echo "Created /data/football-events hdfs dir"
 
+# create a tmp file empty for scores and move it to hdfs
+touch scores.csv
+echo "id, date, homeTeam, awayTeam, homeTeamScore, awayTeamScore" >> scores.csv
+echo "" >> scores.csv
+hdfs dfs -moveFromLocal scores.csv /data/football-events/scores.csv
+
+echo "Created /data/football-events hdfs dir"
 
 wait
