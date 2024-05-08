@@ -1,4 +1,20 @@
 services:
+  web:
+    platform: "linux/amd64"
+    build:
+      context: ./web
+    ports:
+      - "3010:3000"
+    image: t3-app
+    environment:
+      - DB_HOST=rethinkdb
+      - DB_PORT=28015
+      - DB_NAME=football
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=secret
+    networks:
+      - rethinkdb-net
+
   namenode:
     build:
       context: ./hadoop
