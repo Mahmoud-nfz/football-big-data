@@ -11,7 +11,7 @@ import { getConnection } from "~/server/db/db";
 import { tables } from "~/server/db/tables";
 import { Player } from "~/types/player";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function PlayerScreen({
   params,
@@ -23,14 +23,14 @@ export default async function PlayerScreen({
   const headersList = headers();
   const ctx = await createTRPCContext({ headers: headersList });
   const t = createCaller(ctx);
-  
+
   const connection = await getConnection();
 
-  const playerStats: Player = await new Promise((resolve, reject) => {
+  const playerStatsPromise = new Promise<Player>((resolve, reject) => {
     r.table(tables.players)
       .get(decodedName)
-      .run(connection, function (err, result) {
-        if (err) throw err;
+      .run(connection, (err, result) => {
+        if (err) reject(err);
         if (!result) {
           reject(new Error("Player not found"));
         } else {
@@ -40,11 +40,19 @@ export default async function PlayerScreen({
         }
       });
   });
-  
-  const image = await t.images.search({ playerName: decodedName });
-  const playerInfos = await t.playerInfos.getPlayerInfos({ playerName: decodedName });
 
-  const player = {...playerInfos, ...playerStats};
+  const imagePromise = t.images.search({ playerName: decodedName });
+  const playerInfosPromise = t.playerInfos.getPlayerInfos({
+    playerName: decodedName,
+  });
+
+  const [playerStats, image, playerInfos] = await Promise.all([
+    playerStatsPromise,
+    imagePromise,
+    playerInfosPromise,
+  ]);
+
+  const player = { ...playerInfos, ...playerStats };
 
   return (
     <div
