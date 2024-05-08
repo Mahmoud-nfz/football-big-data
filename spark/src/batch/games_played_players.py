@@ -1,13 +1,13 @@
 from src.db.players import update_or_insert_players
 from src.db.output import save_output
 from src.data.load import load_data
-from src.spark.SparkContextManager import SparkContextManager
+from src.spark.context import get_context
 from src.data.columns import events_cols as cols
 
 
 def games_played_players():
     
-    sc = SparkContextManager("games played players").get_context()
+    sc = get_context("games played players")
     
     events = load_data(sc, "events.csv")
 
@@ -28,4 +28,4 @@ def games_played_players():
 
     save_output(top_players, lambda x: f"{x[0]}: {x[1]} games played", "Top 10 players by number of games played")
     
-    # sc.stop()
+    sc.stop()

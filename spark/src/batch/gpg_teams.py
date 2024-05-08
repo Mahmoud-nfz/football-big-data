@@ -1,13 +1,13 @@
 from src.db.teams import update_or_insert_teams
 from src.db.output import save_output
 from src.data.load import load_data
-from src.spark.SparkContextManager import SparkContextManager
+from src.spark.context import get_context
 from src.data.columns import events_cols as cols
 
 
 def gpg_teams():
     
-    sc = SparkContextManager("gpg teams").get_context()
+    sc = get_context("gpg teams")
 
     data = load_data(sc, "events.csv")
 
@@ -33,4 +33,4 @@ def gpg_teams():
 
     save_output(top_teams, lambda x: f"{x[0]}: {x[1]} goals per game", "Top 10 Goals Per Game Teams")
     
-    # sc.stop()
+    sc.stop()

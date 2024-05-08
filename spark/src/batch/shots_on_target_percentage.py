@@ -1,13 +1,13 @@
 from src.db.players import update_or_insert_players
 from src.db.output import save_output
 from src.data.load import load_data
-from src.spark.SparkContextManager import SparkContextManager
+from src.spark.context import get_context
 from src.data.columns import events_cols as cols
 
 
 def shots_on_target_percentage_players():
     
-    sc = SparkContextManager("shots on target players").get_context()
+    sc = get_context("shots on target players")
     
     events = load_data(sc, "events.csv")
     
@@ -29,4 +29,4 @@ def shots_on_target_percentage_players():
 
     save_output(top_players, lambda x: f"{x[0]}: {x[1]} Shots on target percentage", "Top 10 players by percentage of shots on target")
     
-    # sc.stop()
+    sc.stop()

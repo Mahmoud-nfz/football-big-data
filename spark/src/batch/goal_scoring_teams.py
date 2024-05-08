@@ -1,13 +1,13 @@
 from src.db.teams import update_or_insert_teams
 from src.db.output import save_output
 from src.data.load import load_data
-from src.spark.SparkContextManager import SparkContextManager
+from src.spark.context import get_context
 from src.data.columns import events_cols as cols
 
 
 def goal_scoring_teams():
     
-    sc = SparkContextManager("goal scoring teams").get_context()
+    sc = get_context("goal scoring teams")
     
     data = load_data(sc, "events.csv")
     
@@ -26,4 +26,4 @@ def goal_scoring_teams():
 
     save_output(top_scorers, lambda x: f"{x[0]}: {x[1]} goals", "Top 10 Goal Scoring Teams")            
 
-    # sc.stop()
+    sc.stop()
