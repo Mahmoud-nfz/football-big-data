@@ -12,7 +12,6 @@ def shots_on_target_percentage_players():
     events = load_data(sc, "events.csv")
     
     shots = events.filter(lambda x: x[cols["event_type"]] == "1")
-    # shots = events.filter(lambda x: x[cols["shot_outcome"]] == "1")
     
     # mapping to (player, (total_shots_on_target, total_shots)
     shots = shots.map(lambda x: (x[cols["player"]], (x[cols["shot_outcome"]] == "1", 1)))
@@ -26,7 +25,6 @@ def shots_on_target_percentage_players():
     
     update_or_insert_players(shots_percentage_dicts)
 
-    # Retrieve the top teams by best average goals per game
     top_players = shots_percentage.takeOrdered(10, key=lambda x: -x[1])
 
     save_output(top_players, lambda x: f"{x[0]}: {x[1]} Shots on target percentage", "Top 10 players by percentage of shots on target")

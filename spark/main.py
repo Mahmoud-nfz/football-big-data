@@ -1,12 +1,14 @@
 import sched
 import time
 from threading import Thread
+from src.batch.yellow_red_cards_teams import yellow_red_cards_teams
 from src.db.RDBM import RethinkDBManager
 from src.batch.goal_scoring_players import goal_scoring_players
 from src.batch.goal_scoring_teams import goal_scoring_teams
 from src.batch.gpg_teams import gpg_teams
 from src.batch.games_played_players import games_played_players
 from src.batch.shots_on_target_percentage import shots_on_target_percentage_players
+from src.batch.yellow_red_cards_players import yellow_red_cards_players
 from src.kafka.consume import consume_from_kafka
 
 # If you want to add more functions to be run at specific intervals add them here with the desired interval in seconds
@@ -15,7 +17,9 @@ function_intervals = {
     goal_scoring_players: 60,
     shots_on_target_percentage_players: 100,
     games_played_players: 80,
-    gpg_teams: 80
+    gpg_teams: 80,
+    yellow_red_cards_players:110,
+    yellow_red_cards_teams:110,
 }
 
 

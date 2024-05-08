@@ -24,7 +24,6 @@ def games_played_players():
     
     update_or_insert_players(player_games_dicts)
 
-    # Retrieve the top teams by best average goals per game
     top_players = player_games.takeOrdered(10, key=lambda x: -x[1])
 
     save_output(top_players, lambda x: f"{x[0]}: {x[1]} games played", "Top 10 players by number of games played")
