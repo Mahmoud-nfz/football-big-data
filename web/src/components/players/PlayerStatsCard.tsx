@@ -18,6 +18,7 @@ import { latestMatches } from "~/data/matches";
 
 interface PlayerStatsCardProps {
   player: Player;
+  playerImage?: string;
   latestMatches: Match[];
   className?: string;
 }
@@ -37,7 +38,7 @@ export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = (
           icon={
             <div className="h-10 w-10">
               <Image
-                src={player.image}
+                src={player.image ?? props.playerImage}
                 alt={player.name}
                 width={50}
                 height={50}
@@ -57,7 +58,7 @@ export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = (
           <div className="flex flex-col">
             <h3 className="text-xl font-bold">Statistics</h3>
             <p className="text-sm text-gray-500">
-              Last update: {player.updatedAt}
+              Last update: {new Date().toLocaleDateString()}
             </p>
           </div>
 

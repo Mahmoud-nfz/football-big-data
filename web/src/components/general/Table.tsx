@@ -23,15 +23,15 @@ export default function Table(props: TableProps) {
           </tr>
         </thead>
         <tbody className="max-h-32 overflow-y-auto">
-          {props.rows.map((row, idx) => (
-            <tr key={idx}>
-              {props.ordered && <td className="font-bold text-center">{idx+1}</td>}
+          {props.rows.map((row, ridx) => (
+            <tr key={ridx}>
+              {props.ordered && <td className="font-bold text-center">{ridx+1}</td>}
               {row.map((cell, idx) => (
                 <td
                   key={idx}
                   className={`${idx == 0 && "font-semibold capitalize text-blue-700"} whitespace-nowrap px-2 py-1`}
                 >
-                  <Link href={(props.hrefs && props.hrefs[idx]) ?? "#"}>
+                  <Link href={(props.hrefs && props.hrefs[ridx]) ?? "#"}>
                     {cell}
                   </Link>
                 </td>
