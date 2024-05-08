@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "search-engine"
+version = "0.1.0"
+description = ""
+authors = ["Mahmoud <mahmoudhnefzi@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flask = "^3.0.3"
+pandas = "^2.2.2"
+fuzzywuzzy = "^0.18.0"
+python-levenshtein = "^0.25.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

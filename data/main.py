@@ -4,9 +4,9 @@ import os
 # List of datasets to download
 datasets = [
     {"uri": "secareanualin/football-events", "target_path": "/data/football-events"},
+    {"uri": "mahmoud17/football-players-dataset", "target_path": "/data/players-data"},
     # Add more datasets as needed
 ]
-
 
 # Download each dataset
 for dataset in datasets:
