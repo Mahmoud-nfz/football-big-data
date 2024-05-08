@@ -18,7 +18,7 @@ export default async function PlayerScreen({
 }: {
   params: { id: string };
 }) {
-  const decodedId = decodeURIComponent(params.id);
+  const decodedName = decodeURIComponent(params.id);
 
   const headersList = headers();
   const ctx = await createTRPCContext({ headers: headersList });
@@ -26,9 +26,9 @@ export default async function PlayerScreen({
   
   const connection = await getConnection();
 
-  const player: Player = await new Promise((resolve, reject) => {
+  const playerStats: Player = await new Promise((resolve, reject) => {
     r.table(tables.players)
-      .get(decodedId)
+      .get(decodedName)
       .run(connection, function (err, result) {
         if (err) throw err;
         if (!result) {
@@ -41,7 +41,10 @@ export default async function PlayerScreen({
       });
   });
   
-  const image = await t.images.search({ playerName: player.name });
+  const image = await t.images.search({ playerName: decodedName });
+  const playerInfos = await t.playerInfos.getPlayerInfos({ playerName: decodedName });
+
+  const player = {...playerInfos, ...playerStats};
 
   return (
     <div
@@ -53,7 +56,7 @@ export default async function PlayerScreen({
         <div className="z-10 flex h-full items-center justify-between px-5">
           {/* Left Div */}
           <PlayerInfoCard
-            player={player1}
+            player={player}
             className="h-full w-1/3 py-4 text-left"
           />
 

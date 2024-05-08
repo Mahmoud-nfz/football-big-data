@@ -19,8 +19,10 @@ export const env = createEnv({
       // Since NextAuth.js automatically uses the VERCEL_URL if present.
       (str) => process.env.VERCEL_URL ?? str,
       // VERCEL_URL doesn't include `https` so it cant be validated as a URL
-      process.env.VERCEL ? z.string() : z.string().url()
+      process.env.VERCEL ? z.string() : z.string().url(),
     ),
+
+    SEARCH_ENGINE_URL: z.string().url(),
 
     DB_HOST: z.string(),
     DB_PORT: z.coerce.number(),
@@ -47,6 +49,8 @@ export const env = createEnv({
     DB_HOST: process.env.DB_HOST,
     DB_PORT: process.env.DB_PORT,
     DB_NAME: process.env.DB_NAME,
+    SEARCH_ENGINE_URL: process.env.SEARCH_ENGINE_URL,
+
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
