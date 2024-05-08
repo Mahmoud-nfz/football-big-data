@@ -1,5 +1,5 @@
 import { IconProps, MatchesIcon } from "~/assets/icons";
-import { MatchCard } from "./MatchCard";
+import { MatchSmallCard } from "./MatchSmallCard";
 import { Match } from "~/types/match";
 
 interface MatchesListProps {
@@ -18,7 +18,7 @@ export const MatchesList: React.FC<MatchesListProps> = (
             <div className="ml-3 font-semibold">{props.title}</div>
         </div>
         {props.matches.map((match, idx) => (
-            <MatchCard key={idx} match={match} />
+            <MatchSmallCard key={idx} match={match} />
         ))}
     </div>
   );
