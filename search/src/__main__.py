@@ -11,8 +11,12 @@ def search():
     query = request.args.get('query', '')
     if query:
         matched_rows = search_instance.search(query)
-        return jsonify(matched_rows)
-    return jsonify([])
+        if matched_rows:
+            return jsonify(matched_rows)
+        else:
+            return jsonify({"message": "No matches found"}), 404
+    else:
+        return jsonify({"message": "No query provided"}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
