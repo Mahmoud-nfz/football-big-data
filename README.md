@@ -14,6 +14,6 @@ If running for the first time run `bash start.sh download-data` in order to down
 - Run `docker compose run spark bash` to launch a shell inside the container.
 
 
-#### All of the following commands will be run inside the container
+#### All of the following commands will be run inside the container :
 
 - Run `../bin/spark-submit mount/spark/main.py` and it will load the `ginf.csv` file into spark and then run an sql query on it.
