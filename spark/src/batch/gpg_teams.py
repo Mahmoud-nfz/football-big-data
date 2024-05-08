@@ -1,13 +1,14 @@
 from src.db.teams import update_or_insert_teams
 from src.db.output import save_output
 from src.data.load import load_data
-from src.spark.context import create_context
+from src.spark.SparkContextManager import SparkContextManager
 from src.data.columns import events_cols as cols
 
 
 def gpg_teams():
-    sc = create_context("Top Goals Per Game Teams")
     
+    sc = SparkContextManager("gpg teams").get_context()
+
     data = load_data(sc, "events.csv")
 
     goals = data.filter(lambda x: x[cols["is_goal"]] == "1")
@@ -30,6 +31,6 @@ def gpg_teams():
     # Retrieve the top teams by best average goals per game
     top_teams = average_goals_per_game.takeOrdered(10, key=lambda x: -x[1])
 
-    save_output(top_teams, lambda x: f"{x[0]}: {x[1]} goals per game", "output_gpg.txt", "Top 10 Goals Per Game Teams")
+    save_output(top_teams, lambda x: f"{x[0]}: {x[1]} goals per game", "Top 10 Goals Per Game Teams")
     
-    sc.stop()
+    # sc.stop()
