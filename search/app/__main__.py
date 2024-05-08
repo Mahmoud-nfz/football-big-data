@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-from src.search.search_engine import SearchEngine
+from app.search.search_engine import SearchEngine
 
 app = Flask(__name__)
 
@@ -19,4 +19,5 @@ def search():
         return jsonify({"message": "No query provided"}), 400
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
+

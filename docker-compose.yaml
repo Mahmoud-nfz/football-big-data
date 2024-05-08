@@ -1,4 +1,11 @@
 services:
+  search-engine:
+    build: ./search
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/usr/src/data
+
   web:
     platform: "linux/amd64"
     build:

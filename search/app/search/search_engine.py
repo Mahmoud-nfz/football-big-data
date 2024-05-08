@@ -3,7 +3,7 @@ from rapidfuzz import process, fuzz
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Event
 
-from src.utils.singleton import Singleton
+from app.utils.singleton import Singleton
 
 class SearchEngine(metaclass=Singleton):
     def __init__(self, filepath, num_workers=4):
