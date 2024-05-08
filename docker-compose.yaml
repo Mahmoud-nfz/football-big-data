@@ -64,7 +64,6 @@ services:
     volumes:
       - ./spark/src:/opt/spark/work-dir/spark-apps
       - ./.build:/opt/spark/work-dir/build
-      - ./spark/scripts/start-spark-builder.sh:/opt/spark/work-dir/start.sh
 
   spark:
     depends_on:
