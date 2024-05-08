@@ -23,6 +23,7 @@ export const env = createEnv({
     ),
 
     SEARCH_ENGINE_URL: z.string().url(),
+    OPENAI_API_KEY: z.string().optional(),
 
     DB_HOST: z.string(),
     DB_PORT: z.coerce.number(),
@@ -50,6 +51,7 @@ export const env = createEnv({
     DB_PORT: process.env.DB_PORT,
     DB_NAME: process.env.DB_NAME,
     SEARCH_ENGINE_URL: process.env.SEARCH_ENGINE_URL,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
 
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },

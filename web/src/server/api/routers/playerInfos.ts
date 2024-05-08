@@ -2,12 +2,40 @@ import { z } from "zod";
 import { env } from "~/env";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { Player } from "~/types/player";
+import OpenAI from "openai";
 
 export const playerInfosRouter = createTRPCRouter({
   getPlayerInfos: publicProcedure
     .input(z.object({ playerName: z.string().min(1) }))
     .query(async ({ input }) => {
       const url = `${env.SEARCH_ENGINE_URL}?query=${encodeURIComponent(input.playerName)}`;
+
+      let description = "";
+      try {
+        const openai = new OpenAI({
+          apiKey: env?.OPENAI_API_KEY,
+        });
+
+        console.log(
+          "Found openai token starting player description generation",
+        );
+
+        const completion = await openai.chat.completions.create({
+          messages: [
+            {
+              role: "system",
+              content: `Provide a short paragraph talking about footballer ${input.playerName}'s achievements and career`,
+            },
+          ],
+          model: "gpt-3.5-turbo",
+        });
+
+        if (completion?.choices) {
+          description = completion?.choices[0]?.message.content ?? "";
+        }
+      } catch (error) {
+        console.error(error);
+      }
 
       const response = await fetch(url);
 
@@ -25,8 +53,8 @@ export const playerInfosRouter = createTRPCRouter({
         height: playerInfos.height_cm,
         preferredFoot: playerInfos.preferred_foot,
         value: `${playerInfos.value_euro / 1000000} M€`,
+        description,
       };
-
 
       return player;
     }),
