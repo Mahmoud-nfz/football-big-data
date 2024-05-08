@@ -1,12 +1,13 @@
 from src.db.teams import update_or_insert_teams
 from src.db.output import save_output
 from src.data.load import load_data
-from src.spark.context import create_context
+from src.spark.context import get_context
 from src.data.columns import events_cols as cols
 
 
 def goal_scoring_teams():
-    sc = create_context("Top Goal Scoring Teams")
+    
+    sc = get_context("goal scoring teams")
     
     data = load_data(sc, "events.csv")
     
@@ -23,6 +24,6 @@ def goal_scoring_teams():
     # Retrieve the top 10 goal scorers
     top_scorers = goal_counts.takeOrdered(10, key=lambda x: -x[1])
 
-    save_output(top_scorers, lambda x: f"{x[0]}: {x[1]} goals", "output_gst.txt", "Top 10 Goal Scoring Teams")            
+    save_output(top_scorers, lambda x: f"{x[0]}: {x[1]} goals", "Top 10 Goal Scoring Teams")            
 
     sc.stop()

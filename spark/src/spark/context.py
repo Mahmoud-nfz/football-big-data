@@ -1,8 +1,5 @@
 from pyspark import SparkConf, SparkContext
 
-def create_context(app_name: str) -> SparkContext:
-    # Setting up the Spark configuration and context
+def get_context(app_name):
     conf = SparkConf().setAppName(app_name)
-    sc = SparkContext(conf=conf)
-    
-    return sc
+    return SparkContext.getOrCreate(conf=conf)
