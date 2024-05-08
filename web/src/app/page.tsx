@@ -3,6 +3,8 @@ import { player1 as player } from "~/data/players";
 import { TopLists } from "~/components/home/TopLists";
 import { LatestMatchesList } from "~/components/home/LatestMatchesList";
 
+export const dynamic = 'force-dynamic';
+
 export default function HomeScreen() {
   return (
     <div

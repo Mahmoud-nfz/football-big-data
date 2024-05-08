@@ -11,6 +11,8 @@ import { getConnection } from "~/server/db/db";
 import { tables } from "~/server/db/tables";
 import { Player } from "~/types/player";
 
+export const dynamic = 'force-dynamic';
+
 export default async function PlayerScreen({
   params,
 }: {
