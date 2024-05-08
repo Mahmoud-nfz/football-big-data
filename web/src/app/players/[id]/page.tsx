@@ -4,12 +4,10 @@ import { PlayerStatsCard } from "~/components/players/PlayerStatsCard";
 import * as r from "rethinkdb";
 import { player1 } from "~/data/players";
 import { latestMatches } from "~/data/matches";
-import { createTRPCContext } from "~/server/api/trpc";
-import { headers } from "next/headers";
-import { createCaller } from "~/server/api/root";
 import { getConnection } from "~/server/db/db";
 import { tables } from "~/server/db/tables";
-import { Player } from "~/types/player";
+import type { Player } from "~/types/player";
+import { serverSideApi } from "~/trpc/server";
 
 export const dynamic = 'force-dynamic';
 
@@ -19,11 +17,6 @@ export default async function PlayerScreen({
   params: { id: string };
 }) {
   const decodedId = decodeURIComponent(params.id);
-
-  const headersList = headers();
-  const ctx = await createTRPCContext({ headers: headersList });
-  const t = createCaller(ctx);
-  
   const connection = await getConnection();
 
   const player: Player = await new Promise((resolve, reject) => {
@@ -35,13 +28,12 @@ export default async function PlayerScreen({
           reject(new Error("Player not found"));
         } else {
           console.log(result);
-          //@ts-ignore
-          resolve(result);
+          resolve(result as Player);
         }
       });
   });
-  
-  const image = await t.images.search({ playerName: player.name });
+
+  const image = await serverSideApi.images.search({ playerName: player.name });
 
   return (
     <div
