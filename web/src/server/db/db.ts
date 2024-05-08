@@ -1,11 +1,5 @@
 import * as r from "rethinkdb";
-
-// Object to store the connection
-const dbConfig = {
-  host: "localhost",
-  port: 28015,
-  db: "football", // specify your database name if any
-};
+import { env } from "~/env";
 
 const indexes: Record<string, string[]> = {
   players: ["goals"],
@@ -25,7 +19,11 @@ export async function getConnection(): Promise<r.Connection> {
   }
 
   try {
-    connection = await r.connect(dbConfig);
+    connection = await r.connect({
+      host: env.DB_HOST,
+      port: env.DB_PORT,
+      db: env.DB_NAME,
+    });
     console.log("Connected to RethinkDB successfully!");
     // Optional: set up a listener for connection close
     connection.on("close", () => {
