@@ -1,9 +1,11 @@
 import sched
 import time
+from threading import Thread
 from src.db.RDBM import RethinkDBManager
 from src.batch.goal_scoring_players import goal_scoring_players
 from src.batch.goal_scoring_teams import goal_scoring_teams
 from src.batch.gpg_teams import gpg_teams
+from src.kafka.consume import consume_from_kafka
 
 # If you want to add more functions to be run at specific intervals add them here with the desired interval in seconds
 function_intervals = {
@@ -19,7 +21,7 @@ def periodic(scheduler, interval, action, actionargs=()):
     action(*actionargs)
 
 
-def main():
+def batch_processing():
     rdbm = RethinkDBManager()
     rdbm.init()
     
@@ -32,6 +34,23 @@ def main():
 
     # Run the scheduler
     scheduler.run(blocking=True)
+
+
+def streaming_processing():
+    consume_from_kafka()
+
+
+def main():
+    # Create threads for streaming processing and periodic batch processing
+    threads = [Thread(target=batch_processing), Thread(target=streaming_processing)]
+
+    # Start the threads
+    for thread in threads:
+        thread.start()
+
+    # Wait for threads to finish
+    for thread in threads:
+        thread.join()
 
 if __name__ == "__main__":
     main()

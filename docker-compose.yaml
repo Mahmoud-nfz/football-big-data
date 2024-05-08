@@ -51,9 +51,9 @@ services:
   rethinkdb:
     image: rethinkdb
     ports:
-      - "8080:8080"
-      - "28015:28015"
-      - "29015:29015"
+      - 8080:8080
+      - 28015:28015
+      - 29015:29015
     networks:
       - rethinkdb-net
 
@@ -62,7 +62,8 @@ services:
       context: ./spark
       dockerfile: Dockerfile.builder
     volumes:
-      - ./spark:/opt/spark/work-dir
+      - ./spark/src:/opt/spark/work-dir/spark-apps
+      - ./.build:/opt/spark/work-dir/build
 
   spark:
     depends_on:
@@ -71,28 +72,23 @@ services:
       - datanode
     image: apache/spark-py
     environment:
-      YARN_CONF_DIR: "/opt/spark/conf"
-      PYSPARK_PYTHON: "python3.10"
+      YARN_CONF_DIR: "/opt/spark/conf/hadoop"
+      SPARK_CONF_DIR: "/opt/spark/conf/spark"
+      KAFKA_BOOTSTRAP_SERVERS: "kafka-broker:9092"
+      KAFKA_TOPIC: "stream-football"
     volumes:
-      - ./spark:/opt/spark/work-dir/spark-apps
-      - ./data:/opt/spark/work-dir/data
-      - ./hadoop/config:/opt/spark/conf
+      - ./.build:/opt/spark/work-dir/python-packages
+      - ./spark/src:/opt/spark/work-dir/spark-apps/src
+      - ./spark/main.py:/opt/spark/work-dir/spark-apps/main.py
+      - ./spark/config:/opt/spark/conf/spark
+      - ./hadoop/config:/opt/spark/conf/hadoop
     ports:
-      - "4040:4040"
-    command:
-      [
-        "/opt/spark/bin/spark-submit",
-        "--master",
-        "yarn",
-        "--deploy-mode",
-        "client",
-        "--py-files",
-        "/opt/spark/work-dir/spark-apps/src.zip,/opt/spark/work-dir/spark-apps/rethinkdb.zip",
-        "/opt/spark/work-dir/spark-apps/main.py",
-      ]
+      - 4040:4040
+    command: ["/opt/spark/bin/spark-submit", "spark-apps/main.py"]
     networks:
       - rethinkdb-net
       - hadoop-net
+      - kafka-net
 
   scraper:
     build: ./scraper
