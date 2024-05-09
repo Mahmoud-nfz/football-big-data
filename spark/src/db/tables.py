@@ -7,5 +7,9 @@ tables = [
     {
         'name': 'teams',
         'primary_key': 'name'
+    },
+    {
+        'name': 'matches',
+        'primary_key': 'id'
     }
 ]

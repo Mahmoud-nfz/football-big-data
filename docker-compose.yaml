@@ -1,4 +1,11 @@
 services:
+  search-engine:
+    build: ./search
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/usr/src/data
+
   web:
     platform: "linux/amd64"
     build:
@@ -7,11 +14,13 @@ services:
       - "3010:3000"
     image: t3-app
     environment:
-      - DB_HOST=rethinkdb
-      - DB_PORT=28015
-      - DB_NAME=football
-      - NEXTAUTH_URL=http://localhost:3000
-      - NEXTAUTH_SECRET=secret
+      DB_HOST: "rethinkdb"
+      DB_PORT: "28015"
+      DB_NAME: "football"
+      NEXTAUTH_URL: "http://localhost:3000"
+      NEXTAUTH_SECRET: "secret"
+      SEARCH_ENGINE_URL: "http://search-engine:5000"
+      OPENAI_API_KEY: "API-KEY"
     networks:
       - rethinkdb-net
 

@@ -1,7 +1,8 @@
+from src.db.matches import update_or_insert_matches
 from src.config.config import config
 from typing import Dict
 from kafka import KafkaConsumer
-
+import json
 
 # Kafka consumer configuration
 consumer_conf: Dict[str, str] = {
@@ -22,4 +23,8 @@ def consume_from_kafka() -> None:
         print ("%s:%d:%d: key=%s value=%s" % (message.topic, message.partition,
                                             message.offset, message.key,
                                             message.value))
+        
+        matches = json.loads(message.value)["matches"]
+        
+        update_or_insert_matches(matches)
 
