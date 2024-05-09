@@ -16,7 +16,16 @@ export const TopPlayers = async (props: TopPlayersProps) => {
       .run(connection, function (err, cursor) {
         if (err) throw err;
         cursor.toArray().then(function (results) {
-          resolve(results);
+          const mappedResults = results.map((result) => {
+            return {
+              ...result,
+              matches: result.games_played,
+              redCards: result["red cards"],
+              yellowCards: result["yellow cards"],
+              shotsOnTargetPercentage: result["shots_on_target_percentage"],
+            };
+          });
+          resolve(mappedResults);
         });
       });
   });
@@ -26,12 +35,12 @@ export const TopPlayers = async (props: TopPlayersProps) => {
     <div className="mt-5 flex flex-col justify-between">
       <h3 className="mb-3 text-xl font-bold">Top goalscoring players</h3>
       <Table
-        columns={["Name", "Goals", "Played", "Won"]}
+        columns={["Name", "Goals", "Played", "onTarget%"]}
         rows={players.map((player) => [
           player.name,
           player.goals,
           player.matches,
-          player.matchesWon,
+          player.shotsOnTargetPercentage,
         ])}
         hrefs={players.map((player) => `/players/${player.name}`)}
         ordered={true}

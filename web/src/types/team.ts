@@ -6,4 +6,5 @@ export interface Team {
   goals?: number;
   goalsPerGame?: number;
   goalsAgainst?: number;
+  yellowCards: number;
 }

@@ -16,7 +16,15 @@ export const TopTeams = async (props: TopTeamsProps) => {
       .run(connection, function (err, cursor) {
         if (err) throw err;
         cursor.toArray().then(function (results) {
-          resolve(results);
+          const mappedResults = results.map((result) => {
+            return {
+              ...result,
+              goalsPerGame: result["goals_per_game"],
+              redCards: result["red cards"],
+              yellowCards: result["yellow cards"],
+            };
+          });
+          resolve(mappedResults);
         });
       });
   });
@@ -25,12 +33,12 @@ export const TopTeams = async (props: TopTeamsProps) => {
     <div className="mt-5 flex flex-col justify-between">
       <h3 className="mb-3 text-xl font-bold">Top goalscoring teams</h3>
       <Table
-        columns={["Name", "Goals", "Played", "Won"]}
+        columns={["Name", "Goals", "Goals Per Game", "Yellow Cards"]}
         rows={teams.map((team) => [
           team.name,
           team.goals,
           team.goalsPerGame,
-          team.goalsAgainst,
+          team.yellowCards,
         ])}
         ordered={true}
       />
