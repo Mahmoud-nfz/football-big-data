@@ -11,6 +11,7 @@ import { createTRPCReact } from "@trpc/react-query";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import { useState } from "react";
 import SuperJSON from "superjson";
+import { env } from "~/env";
 
 import { type AppRouter } from "~/server/api/root";
 
@@ -91,12 +92,11 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
 }
 
 function getBaseHttpUrl() {
-  if (typeof window !== "undefined") return window.location.origin;
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return `http://localhost:${process.env.PORT ?? 3000}`;
+  return env.NEXT_PUBLIC_NEXT_URL;
 }
 
 function getBaseWsUrl() {
   if (process.env.VERCEL_URL) return `ws://${process.env.VERCEL_URL}`;
-  return `ws://localhost:${process.env.PORT ?? 3001}`;
+  return env.NEXT_PUBLIC_WS_URL;
 }

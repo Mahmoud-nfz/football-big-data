@@ -7,9 +7,11 @@ import {
   applyWSSHandler,
 } from "@trpc/server/adapters/ws";
 import { WebSocketServer } from "ws";
-import { getSession } from 'next-auth/react';
+import { getSession } from "next-auth/react";
+import "dotenv/config";
 
 import { appRouter } from "./server/api/root";
+import { env } from "./env";
 
 const createContext = async (opts: CreateWSSContextFnOptions) => {
   const session = await getSession(opts);
@@ -19,11 +21,11 @@ const createContext = async (opts: CreateWSSContextFnOptions) => {
 
   return {
     session,
-    headers
+    headers,
   };
 };
 
-const app = next({ dev: process.env.NODE_ENV !== "production" });
+const app = next({ dev: env.NODE_ENV !== "production" });
 const handle = app.getRequestHandler();
 
 void app.prepare().then(() => {
@@ -33,7 +35,7 @@ void app.prepare().then(() => {
     const parsedUrl = parse(req.url, true);
     await handle(req, res, parsedUrl);
   });
-  const wss = new WebSocketServer({ server });
+  const wss = new WebSocketServer({ noServer: true });
   const handler = applyWSSHandler({
     wss,
     router: appRouter,
@@ -57,9 +59,9 @@ void app.prepare().then(() => {
   server.on = function (event, listener) {
     return event !== "upgrade" ? originalOn(event, listener) : server;
   };
-  server.listen(process.env.PORT ?? 3001);
+  server.listen(env.NEXT_PUBLIC_WS_PORT);
 
   console.log(
-    `> Server listening at ws://localhost:${process.env.PORT ?? 3001} as ${process.env.NODE_ENV}`,
+    `> Server listening at ${env.NEXT_PUBLIC_WS_PORT} as ${env.NODE_ENV}`,
   );
 });

@@ -1,13 +1,22 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
-      "module": "commonjs",
       "outDir": "dist",
       "target": "ES2019",
       "lib": ["ES2019", "DOM"],
-      "isolatedModules": false,
-      "noEmit": false
+      "isolatedModules": true,
+      "noEmit": false,
+      "strict": true,
+      "resolveJsonModule": true,
+      "resolvePackageJsonImports": true
     },
-    "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx"]
+    "include": [
+      "next.config.js",
+      "next-env.d.ts",
+      ".next/types/**/*.ts",
+      "src/server/**/*.ts",
+      "src/ws-server.ts",
+      "src/env.js"
+    ]
   }
   

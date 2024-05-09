@@ -33,7 +33,10 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_NEXT_PORT: z.coerce.number(),
+    NEXT_PUBLIC_WS_PORT: z.coerce.number(),
+    NEXT_PUBLIC_NEXT_URL: z.string().url(),
+    NEXT_PUBLIC_WS_URL: z.string().url(),
   },
 
   /**
@@ -47,7 +50,11 @@ export const env = createEnv({
     DB_HOST: process.env.DB_HOST,
     DB_PORT: process.env.DB_PORT,
     DB_NAME: process.env.DB_NAME,
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    NEXT_PUBLIC_NEXT_PORT: process.env.NEXT_PUBLIC_NEXT_PORT ?? "3000",
+    NEXT_PUBLIC_WS_PORT: process.env.NEXT_PUBLIC_WS_PORT ?? "3001",
+    NEXT_PUBLIC_NEXT_URL:
+      process.env.NEXT_PUBLIC_NEXT_URL ?? "http://localhost:3000",
+    NEXT_PUBLIC_WS_URL: process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:3001",
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

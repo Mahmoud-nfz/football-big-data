@@ -4,14 +4,18 @@ services:
     build:
       context: ./web
     ports:
-      - "3010:3000"
-    image: t3-app
+      - 3010:3000
+      - 3001:3001
     environment:
-      - DB_HOST=rethinkdb
-      - DB_PORT=28015
-      - DB_NAME=football
-      - NEXTAUTH_URL=http://localhost:3000
-      - NEXTAUTH_SECRET=secret
+      DB_HOST: "rethinkdb"
+      DB_PORT: "28015"
+      DB_NAME: "football"
+      NEXTAUTH_URL: "http://localhost:3000"
+      NEXTAUTH_SECRET: "secret"
+      NEXT_PUBLIC_NEXT_URL: "http://localhost:3000"
+      NEXT_PUBLIC_NEXT_PORT: "3000"
+      NEXT_PUBLIC_WS_URL: "ws://localhost:3001"
+      NEXT_PUBLIC_WS_PORT: "3001"
     networks:
       - rethinkdb-net
 
