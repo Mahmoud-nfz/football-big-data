@@ -1,6 +1,6 @@
 "use client";
 
-import { Player } from "~/types/player";
+import type { Player } from "~/types/player";
 import Image from "next/image";
 import { DetailsQuad } from "./DetailsQuad";
 import {
@@ -12,9 +12,8 @@ import {
 } from "~/assets/icons";
 import { DropDownSelector } from "../general/DropdownSelector";
 import { useState } from "react";
-import { Match } from "~/types/match";
+import type { Match } from "~/types/match";
 import { MatchesList } from "../matches/MatchesList";
-import { latestMatches } from "~/data/matches";
 
 interface PlayerStatsCardProps {
   player: Player;
@@ -64,7 +63,7 @@ export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = (
 
           <DropDownSelector
             icon={<SeasonIcon className="h-5 w-5" />}
-            current={cuurentSeason || "Select Season"}
+            current={cuurentSeason ?? "Select Season"}
             options={["2020/2021", "2021/2022", "2022/2023"]}
             onSelect={(option) => {
               setCurrentSeason(option);
@@ -82,7 +81,7 @@ export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = (
         />
 
         <div className="mx-1 mt-5 flex flex-row bg-white">
-          <MatchesList matches={latestMatches} title="Latest Matches" />
+          <MatchesList matches={props.latestMatches} title="Latest Matches" />
         </div>
         <div className="p-3 justify-end text-right flex flex-row">
           <DropDownSelector

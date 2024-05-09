@@ -17,11 +17,17 @@ export const LatestMatchesList: React.FC<LatestMatchesListProps> = (
 
   clientSideApi.streaming.latestMatches.useSubscription(undefined, {
     onData(newMatch) {
-      setMatches((matches) =>
-        matches.length > 3
-          ? [newMatch, ...matches.slice(0, -1)]
-          : [newMatch, ...matches],
-      );
+      setMatches((matches) => {
+        const index = matches.findIndex(({ id }) => newMatch.id === id);
+        if (index >= 0)
+          return [...matches].map((oldMatch, i) =>
+            i === index ? newMatch : oldMatch,
+          );
+        else
+          return matches.length > 3
+            ? [newMatch, ...matches.slice(0, -1)]
+            : [newMatch, ...matches];
+      });
     },
   });
 

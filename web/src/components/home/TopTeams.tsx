@@ -2,7 +2,7 @@ import Table from "../general/Table";
 import r from "rethinkdb";
 import { tables } from "~/server/db/tables";
 import { getConnection } from "~/server/db/db";
-import { Team } from "~/types/team";
+import type { Team } from "~/types/team";
 
 interface TopTeamsProps {}
 
@@ -15,6 +15,7 @@ export const TopTeams = async (props: TopTeamsProps) => {
       .limit(4)
       .run(connection, function (err, cursor) {
         if (err) throw err;
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         cursor.toArray().then(function (results) {
           resolve(results);
         });

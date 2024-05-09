@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { player1 as player } from "~/data/players";
 import { TopLists } from "~/components/home/TopLists";
 import { LatestMatchesList } from "~/components/home/LatestMatchesList";
+import messiImage from "public/images/player.png";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function HomeScreen() {
   return (
@@ -15,14 +15,12 @@ export default function HomeScreen() {
       <div className="absolute inset-0 h-full w-full bg-white bg-opacity-90">
         <div className="z-10 flex h-full items-center justify-between px-5">
           {/* Left Div */}
-          <TopLists
-            className="h-full w-1/3 py-4 text-left"
-          />
+          <TopLists className="h-full w-1/3 py-4 text-left" />
 
           {/* Center Image */}
           <div className="flex-shrink-0">
             <Image
-              src={player.image}
+              src={messiImage}
               alt="Center Image"
               width={300}
               height={300}
@@ -30,9 +28,7 @@ export default function HomeScreen() {
           </div>
 
           {/* Right Div */}
-          <LatestMatchesList
-            className="h-full w-1/3 py-4 text-left"
-          />
+          <LatestMatchesList className="h-full w-1/3 py-4 text-left" />
         </div>
       </div>
     </div>

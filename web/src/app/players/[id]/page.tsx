@@ -2,7 +2,6 @@ import Image from "next/image";
 import { PlayerInfoCard } from "~/components/players/PlayerInfoCard";
 import { PlayerStatsCard } from "~/components/players/PlayerStatsCard";
 import r from "rethinkdb";
-import { latestMatches } from "~/data/matches";
 import { getConnection } from "~/server/db/db";
 import { tables } from "~/server/db/tables";
 import type { Player } from "~/types/player";
@@ -80,7 +79,8 @@ export default async function PlayerScreen({
           <PlayerStatsCard
             player={player}
             playerImage={image?.url ?? "/images/player.png"}
-            latestMatches={latestMatches}
+            /* TODO: resolve latest matches for a player */
+            latestMatches={[]}
             className="h-full w-1/3 py-4 text-left"
           />
         </div>
