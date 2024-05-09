@@ -54,6 +54,12 @@ export default async function PlayerScreen({
 
   const player = { ...playerInfos, ...playerStats };
 
+  const { url: clubLogo } = await t.playerInfos.getClubLogo({
+    clubName: player.club ?? "",
+  });
+
+  player.clubIcon = clubLogo;
+
   return (
     <div
       className="relative min-h-screen bg-cover bg-fixed bg-center bg-no-repeat"

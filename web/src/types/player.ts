@@ -6,6 +6,7 @@ export interface Player {
   team: string;
   image: string;
   clubIcon: string;
+  club?: string;
   countryFlag: string;
   preferredFoot: string;
   height: string;

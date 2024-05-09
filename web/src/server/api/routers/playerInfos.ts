@@ -8,7 +8,7 @@ export const playerInfosRouter = createTRPCRouter({
   getPlayerInfos: publicProcedure
     .input(z.object({ playerName: z.string().min(1) }))
     .query(async ({ input }) => {
-      const url = `${env.SEARCH_ENGINE_URL}?query=${encodeURIComponent(input.playerName)}`;
+      const url = `${env.SEARCH_ENGINE_URL}?resource=players&query=${encodeURIComponent(input.playerName)}`;
 
       let description = "";
       try {
@@ -33,6 +33,7 @@ export const playerInfosRouter = createTRPCRouter({
         if (completion?.choices) {
           description = completion?.choices[0]?.message.content ?? "";
         }
+        
       } catch (error) {
         console.error(error);
       }
@@ -58,4 +59,25 @@ export const playerInfosRouter = createTRPCRouter({
 
       return player;
     }),
+    
+  getClubLogo: publicProcedure
+  .input(z.object({ clubName: z.string().min(1) }))
+  .query(async ({ input }) => {
+    const url = `${env.SEARCH_ENGINE_URL}?resource=clubs&query=${encodeURIComponent(input.clubName)}`;
+    console.log(url);
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch data: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    const clubInfos = await response.json();
+
+    return {
+        url: clubInfos.club_logo_url,
+    };
+  }),
 });
