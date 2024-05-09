@@ -6,6 +6,7 @@ import { getConnection } from "~/server/db/db";
 import { tables } from "~/server/db/tables";
 import type { Player } from "~/types/player";
 import { serverSideApi } from "~/trpc/server";
+import type { Match } from "~/types/match";
 
 export const dynamic = "force-dynamic";
 
@@ -45,11 +46,39 @@ export default async function PlayerScreen({
 
   const player = { ...playerInfos, ...playerStats };
 
-  const { url: clubLogo } = await serverSideApi.playerInfos.getClubLogo({
-    clubName: player.club ?? "",
+  const latestMatches = await new Promise<Match[]>((resolve, reject) => {
+    r.table(tables.matches)
+      .filter(function (row) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return row("ht").match(player.club);
+      })
+      .limit(4)
+      .run(connection, (err, cursor) => {
+        if (err) reject(err);
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        cursor.toArray().then(async function (results) {
+          console.log("h", results);
+
+          for (const match of results) {
+            match.homeTeam.crest = await serverSideApi.playerInfos.getClubLogo({
+              clubName: match.homeTeam.name,
+            }).then(res => res.url);
+            match.awayTeam.crest = await serverSideApi.playerInfos.getClubLogo({
+              clubName: match.awayTeam.name,
+            }).then(res => res.url);
+          }
+
+          resolve(results as Match[]);
+        });
+      });
   });
 
-  player.clubIcon = clubLogo;
+  const { url: clubLogo } = await serverSideApi.playerInfos.getClubLogo({
+    clubName: player.club ?? "manchester",
+  });
+
+  player.clubIcon = clubLogo ?? "";
 
   return (
     <div
@@ -80,7 +109,7 @@ export default async function PlayerScreen({
             player={player}
             playerImage={image?.url ?? "/images/player.png"}
             /* TODO: resolve latest matches for a player */
-            latestMatches={[]}
+            latestMatches={[...latestMatches]}
             className="h-full w-1/3 py-4 text-left"
           />
         </div>

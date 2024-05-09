@@ -68,9 +68,10 @@ export const playerInfosRouter = createTRPCRouter({
       const response = await fetch(url);
 
       if (!response.ok) {
-        throw new Error(
+        console.error(
           `Failed to fetch data: ${response.status} ${response.statusText}`,
         );
+        return { url: null };
       }
 
       const clubInfos = (await response.json()) as { club_logo_url: string };

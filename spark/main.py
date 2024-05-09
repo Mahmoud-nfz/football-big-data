@@ -10,6 +10,7 @@ from src.batch.games_played_players import games_played_players
 from src.batch.shots_on_target_percentage import shots_on_target_percentage_players
 from src.batch.yellow_red_cards_players import yellow_red_cards_players
 from src.batch.player_clubs import player_clubs
+from src.batch.matches import matches
 from src.kafka.consume import consume_from_kafka
 
 # If you want to add more functions to be run at specific intervals add them here with the desired interval in seconds
@@ -20,8 +21,9 @@ function_intervals = {
     games_played_players: 80,
     gpg_teams: 80,
     yellow_red_cards_players:110,
-    yellow_red_cards_teams:110,
-    player_clubs: 130,
+    # yellow_red_cards_teams:110,
+    player_clubs: 110,
+    matches: 50,
 }
 
 
