@@ -3,7 +3,6 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-
 import { env } from "~/env";
 
 /**
@@ -33,6 +32,11 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  secret: env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+  },
+  useSecureCookies: true,
   callbacks: {
     session: ({ session, token }) => ({
       ...session,

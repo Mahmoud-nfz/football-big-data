@@ -7,7 +7,7 @@ from src.data.columns import events_cols as cols
 
 def player_clubs():
     
-    sc = get_context("player last teams")
+    sc = get_context("player clubs")
 
     events = load_data(sc, "events.csv")
 

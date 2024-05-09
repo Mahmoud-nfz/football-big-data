@@ -1,8 +1,8 @@
 import Table from "../general/Table";
-import * as r from "rethinkdb";
+import r from "rethinkdb";
 import { tables } from "~/server/db/tables";
 import { getConnection } from "~/server/db/db";
-import { Player } from "~/types/player";
+import type { Player } from "~/types/player";
 
 interface TopPlayersProps {}
 
@@ -15,23 +15,34 @@ export const TopPlayers = async (props: TopPlayersProps) => {
       .limit(4)
       .run(connection, function (err, cursor) {
         if (err) throw err;
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         cursor.toArray().then(function (results) {
-          resolve(results);
+          const mappedResults = results.map((result) => {
+            return {
+              ...result,
+              matches: result.games_played,
+              redCards: result["red cards"],
+              yellowCards: result["yellow cards"],
+              shotsOnTargetPercentage: result["shots_on_target_percentage"],
+            };
+          });
+          resolve(mappedResults);
         });
       });
   });
-
 
   return (
     <div className="mt-5 flex flex-col justify-between">
       <h3 className="mb-3 text-xl font-bold">Top goalscoring players</h3>
       <Table
-        columns={["Name", "Goals", "Played", "Won"]}
+        columns={["Name", "Goals", "Played", "onTarget%"]}
         rows={players.map((player) => [
           player.name,
           player.goals,
           player.matches,
-          player.matchesWon,
+          player.shotsOnTargetPercentage
+            ? `${player.shotsOnTargetPercentage.toFixed(1)} %`
+            : "",
         ])}
         hrefs={players.map((player) => `/players/${player.name}`)}
         ordered={true}

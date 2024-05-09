@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { env } from "~/env";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { Player } from "~/types/player";
+import type { Player } from "~/types/player";
 import OpenAI from "openai";
 
 export const playerInfosRouter = createTRPCRouter({
@@ -33,7 +33,6 @@ export const playerInfosRouter = createTRPCRouter({
         if (completion?.choices) {
           description = completion?.choices[0]?.message.content ?? "";
         }
-        
       } catch (error) {
         console.error(error);
       }
@@ -59,25 +58,26 @@ export const playerInfosRouter = createTRPCRouter({
 
       return player;
     }),
-    
+
   getClubLogo: publicProcedure
-  .input(z.object({ clubName: z.string().min(1) }))
-  .query(async ({ input }) => {
-    const url = `${env.SEARCH_ENGINE_URL}?resource=clubs&query=${encodeURIComponent(input.clubName)}`;
-    console.log(url);
+    .input(z.object({ clubName: z.string().min(1) }))
+    .query(async ({ input }) => {
+      const url = `${env.SEARCH_ENGINE_URL}?resource=clubs&query=${encodeURIComponent(input.clubName)}`;
+      console.log(url);
 
-    const response = await fetch(url);
+      const response = await fetch(url);
 
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch data: ${response.status} ${response.statusText}`,
-      );
-    }
+      if (!response.ok) {
+        console.error(
+          `Failed to fetch data: ${response.status} ${response.statusText}`,
+        );
+        return { url: null };
+      }
 
-    const clubInfos = await response.json();
+      const clubInfos = (await response.json()) as { club_logo_url: string };
 
-    return {
+      return {
         url: clubInfos.club_logo_url,
-    };
-  }),
+      };
+    }),
 });

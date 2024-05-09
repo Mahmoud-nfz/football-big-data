@@ -1,4 +1,4 @@
-import { Player } from "~/types/player";
+import type { Player } from "~/types/player";
 
 export const player1: Player = {
   id: 1,
@@ -22,6 +22,7 @@ export const player1: Player = {
   assists: 305,
   matches: 778,
   matchesWon: 500,
+  shotsOnTargetPercentage: 20
 };
 
 export const player2: Player = {
@@ -46,4 +47,5 @@ export const player2: Player = {
   assists: 220,
   matches: 900,
   matchesWon: 600,
+  shotsOnTargetPercentage: 30
 };

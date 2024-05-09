@@ -29,7 +29,7 @@ export default function Table(props: TableProps) {
               {row.map((cell, idx) => (
                 <td
                   key={idx}
-                  className={`${idx == 0 && "font-semibold capitalize text-blue-700"} whitespace-nowrap px-2 py-1`}
+                  className={`${idx == 0 && "font-semibold capitalize text-blue-700"} text-center whitespace-nowrap px-2 py-1`}
                 >
                   <Link href={(props.hrefs && props.hrefs[ridx]) ?? "#"}>
                     {cell}

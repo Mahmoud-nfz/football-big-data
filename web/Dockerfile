@@ -37,7 +37,7 @@ RUN \
 
 ##### RUNNER
 
-FROM --platform=linux/amd64 gcr.io/distroless/nodejs20-debian12 AS runner
+FROM --platform=linux/amd64 node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
@@ -51,7 +51,7 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-EXPOSE 3000
-ENV PORT 3000
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./
 
-CMD ["server.js"]
+CMD ["sh", "-c", "node src/ws-server.js & node server.js & wait"]

@@ -1,8 +1,8 @@
 import Table from "../general/Table";
-import * as r from "rethinkdb";
+import r from "rethinkdb";
 import { tables } from "~/server/db/tables";
 import { getConnection } from "~/server/db/db";
-import { Team } from "~/types/team";
+import type { Team } from "~/types/team";
 
 interface TopTeamsProps {}
 
@@ -11,12 +11,21 @@ export const TopTeams = async (props: TopTeamsProps) => {
 
   const teams: Team[] = await new Promise((resolve, reject) => {
     r.table(tables.teams)
-        .orderBy({index: r.desc('goals')})
+      .orderBy({ index: r.desc("goals") })
       .limit(4)
       .run(connection, function (err, cursor) {
         if (err) throw err;
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         cursor.toArray().then(function (results) {
-          resolve(results);
+          const mappedResults = results.map((result) => {
+            return {
+              ...result,
+              goalsPerGame: result["goals_per_game"],
+              redCards: result["red cards"],
+              yellowCards: result["yellow cards"],
+            };
+          });
+          resolve(mappedResults);
         });
       });
   });
@@ -25,12 +34,12 @@ export const TopTeams = async (props: TopTeamsProps) => {
     <div className="mt-5 flex flex-col justify-between">
       <h3 className="mb-3 text-xl font-bold">Top goalscoring teams</h3>
       <Table
-        columns={["Name", "Goals", "Played", "Won"]}
+        columns={["Name", "Goals", "Goals Per Game", "Yellow Cards"]}
         rows={teams.map((team) => [
           team.name,
           team.goals,
-          team.goalsPerGame,
-          team.goalsAgainst,
+          team.goalsPerGame ? team.goalsPerGame.toFixed(2).toString() : "",
+          team.yellowCards,
         ])}
         ordered={true}
       />

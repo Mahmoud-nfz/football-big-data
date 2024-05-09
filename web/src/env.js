@@ -10,16 +10,13 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
-    NEXTAUTH_SECRET:
-      process.env.NODE_ENV === "production"
-        ? z.string()
-        : z.string().optional(),
+    NEXTAUTH_SECRET: z.string().optional(),
     NEXTAUTH_URL: z.preprocess(
       // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
       // Since NextAuth.js automatically uses the VERCEL_URL if present.
       (str) => process.env.VERCEL_URL ?? str,
       // VERCEL_URL doesn't include `https` so it cant be validated as a URL
-      process.env.VERCEL ? z.string() : z.string().url(),
+      process.env.VERCEL ? z.string() : z.string().url().optional(),
     ),
 
     SEARCH_ENGINE_URL: z.string().url(),
@@ -36,7 +33,10 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_NEXT_PORT: z.coerce.number(),
+    NEXT_PUBLIC_WS_PORT: z.coerce.number(),
+    NEXT_PUBLIC_NEXT_URL: z.string().url(),
+    NEXT_PUBLIC_WS_URL: z.string().url(),
   },
 
   /**
@@ -50,10 +50,13 @@ export const env = createEnv({
     DB_HOST: process.env.DB_HOST,
     DB_PORT: process.env.DB_PORT,
     DB_NAME: process.env.DB_NAME,
+    NEXT_PUBLIC_NEXT_PORT: process.env.NEXT_PUBLIC_NEXT_PORT ?? "3010",
+    NEXT_PUBLIC_WS_PORT: process.env.NEXT_PUBLIC_WS_PORT ?? "3011",
+    NEXT_PUBLIC_NEXT_URL:
+      process.env.NEXT_PUBLIC_NEXT_URL ?? "http://localhost:3010",
+    NEXT_PUBLIC_WS_URL: process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:3011",
     SEARCH_ENGINE_URL: process.env.SEARCH_ENGINE_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

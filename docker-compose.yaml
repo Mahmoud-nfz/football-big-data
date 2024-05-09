@@ -2,7 +2,7 @@ services:
   search-engine:
     build: ./search
     ports:
-      - "5000:5000"
+      - 5000:5000
     volumes:
       - ./data:/usr/src/data
 
@@ -11,16 +11,14 @@ services:
     build:
       context: ./web
     ports:
-      - "3010:3000"
-    image: t3-app
+      - 3010:3010
+      - 3011:3011
     environment:
       DB_HOST: "rethinkdb"
       DB_PORT: "28015"
       DB_NAME: "football"
-      NEXTAUTH_URL: "http://localhost:3000"
-      NEXTAUTH_SECRET: "secret"
+      PORT: "3010"
       SEARCH_ENGINE_URL: "http://search-engine:5000"
-      OPENAI_API_KEY: "API-KEY"
     networks:
       - rethinkdb-net
 
@@ -60,7 +58,6 @@ services:
       - 8088:8088
     volumes:
       - ./hadoop/config:/opt/hadoop/etc/hadoop
-      - ./test.sh:/opt/test.sh
     networks:
       - hadoop-net
 

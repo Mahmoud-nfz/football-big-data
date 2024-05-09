@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { PlayerInfoCard } from "~/components/players/PlayerInfoCard";
-import { PlayerStatsCard } from "~/components/players/PlayerStatsCard";
 import { player1, player2 } from "~/data/players";
 
 export default function PlayerScreen() {

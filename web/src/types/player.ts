@@ -18,4 +18,5 @@ export interface Player {
   assists: number;
   matches: number;
   matchesWon: number;
+  shotsOnTargetPercentage: number;
 }

@@ -1,4 +1,4 @@
-import { IconProps, MatchesIcon } from "~/assets/icons";
+import { MatchesIcon } from "~/assets/icons";
 import { MatchSmallCard } from "./MatchSmallCard";
 import { Match } from "~/types/match";
 
