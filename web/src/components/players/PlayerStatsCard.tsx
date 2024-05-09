@@ -83,22 +83,13 @@ export const PlayerStatsCard: React.FC<PlayerStatsCardProps> = (
         <div className="mx-1 mt-5 flex flex-row bg-white">
           <MatchesList matches={props.latestMatches} title="Latest Matches" />
         </div>
-        <div className="p-3 justify-end text-right flex flex-row">
+        <div className="flex flex-row justify-end p-3 text-right">
           <DropDownSelector
-            icon={
-              <div className="h-4 w-4">
-                <Image
-                  src={player.image}
-                  alt={player.name}
-                  width={50}
-                  height={50}
-                />
-              </div>
-            }
+            icon={<div></div>}
             current={"Compare"}
             options={otherPlayers}
             onSelect={(option) => {
-                // compare with other player
+              // compare with other player
             }}
             // className="mx-2 w-1/3"
             dropDirection="up"

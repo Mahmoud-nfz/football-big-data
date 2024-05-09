@@ -40,7 +40,9 @@ export const TopPlayers = async (props: TopPlayersProps) => {
           player.name,
           player.goals,
           player.matches,
-          player.shotsOnTargetPercentage,
+          player.shotsOnTargetPercentage
+            ? `${player.shotsOnTargetPercentage.toFixed(1)} %`
+            : "",
         ])}
         hrefs={players.map((player) => `/players/${player.name}`)}
         ordered={true}

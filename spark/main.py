@@ -21,7 +21,7 @@ function_intervals = {
     games_played_players: 80,
     gpg_teams: 80,
     yellow_red_cards_players:110,
-    # yellow_red_cards_teams:110,
+    yellow_red_cards_teams:110,
     player_clubs: 110,
     matches: 50,
 }

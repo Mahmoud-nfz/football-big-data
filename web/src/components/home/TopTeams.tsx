@@ -38,7 +38,7 @@ export const TopTeams = async (props: TopTeamsProps) => {
         rows={teams.map((team) => [
           team.name,
           team.goals,
-          team.goalsPerGame,
+          team.goalsPerGame ? team.goalsPerGame.toFixed(2).toString() : "",
           team.yellowCards,
         ])}
         ordered={true}

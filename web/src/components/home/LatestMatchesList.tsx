@@ -8,12 +8,13 @@ import type { Match } from "~/types/match";
 
 interface LatestMatchesListProps {
   className?: string;
+  initialLatestMatches: Match[];
 }
 
 export const LatestMatchesList: React.FC<LatestMatchesListProps> = (
   props: LatestMatchesListProps,
 ) => {
-  const [matches, setMatches] = useState<Match[]>([]);
+  const [matches, setMatches] = useState([...props.initialLatestMatches]);
 
   clientSideApi.streaming.latestMatches.useSubscription(undefined, {
     onData(newMatch) {
@@ -30,8 +31,6 @@ export const LatestMatchesList: React.FC<LatestMatchesListProps> = (
       });
     },
   });
-
-  console.log(matches);
 
   return (
     <div className={`${props.className}`}>

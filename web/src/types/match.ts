@@ -24,6 +24,7 @@ export interface Match {
   };
   homeTeam: Team;
   awayTeam: Team;
+  league: string;
   status: string;
   utcDate: string;
   stage: string;

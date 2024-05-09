@@ -26,7 +26,7 @@ def matches():
             "name": match["ht"]
         }
         match["competition"] = {
-            "name": match["league"]
+            "name": match["country"] + " " + match["league"]
         }
         match["score"] = {
             "fullTime": {
