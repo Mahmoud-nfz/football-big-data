@@ -1,5 +1,5 @@
 import Table from "../general/Table";
-import * as r from "rethinkdb";
+import r from "rethinkdb";
 import { tables } from "~/server/db/tables";
 import { getConnection } from "~/server/db/db";
 import { Player } from "~/types/player";
@@ -20,7 +20,6 @@ export const TopPlayers = async (props: TopPlayersProps) => {
         });
       });
   });
-
 
   return (
     <div className="mt-5 flex flex-col justify-between">

@@ -1,4 +1,4 @@
-import * as r from "rethinkdb";
+import r from "rethinkdb";
 import { env } from "~/env";
 
 const indexes: Record<string, string[]> = {

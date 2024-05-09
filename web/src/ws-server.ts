@@ -12,6 +12,7 @@ import "dotenv/config";
 
 import { appRouter } from "./server/api/root";
 import { env } from "./env";
+import { getConnection } from "./server/db/db";
 
 const createContext = async (opts: CreateWSSContextFnOptions) => {
   const session = await getSession(opts);
@@ -28,7 +29,7 @@ const createContext = async (opts: CreateWSSContextFnOptions) => {
 const app = next({ dev: env.NODE_ENV !== "production" });
 const handle = app.getRequestHandler();
 
-void app.prepare().then(() => {
+void app.prepare().then(async () => {
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   const server = createServer(async (req, res) => {
     if (!req.url) return;
@@ -59,6 +60,9 @@ void app.prepare().then(() => {
   server.on = function (event, listener) {
     return event !== "upgrade" ? originalOn(event, listener) : server;
   };
+
+  await getConnection();
+
   server.listen(env.NEXT_PUBLIC_WS_PORT);
 
   console.log(

@@ -1,5 +1,5 @@
 import Table from "../general/Table";
-import * as r from "rethinkdb";
+import r from "rethinkdb";
 import { tables } from "~/server/db/tables";
 import { getConnection } from "~/server/db/db";
 import { Team } from "~/types/team";
@@ -11,7 +11,7 @@ export const TopTeams = async (props: TopTeamsProps) => {
 
   const teams: Team[] = await new Promise((resolve, reject) => {
     r.table(tables.teams)
-        .orderBy({index: r.desc('goals')})
+      .orderBy({ index: r.desc("goals") })
       .limit(4)
       .run(connection, function (err, cursor) {
         if (err) throw err;

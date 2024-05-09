@@ -1,10 +1,10 @@
 "use client";
 
-import { latestMatches } from "~/data/matches";
 import { ChevronLeftIcon, ChevronRightIcon, SeasonIcon } from "~/assets/icons";
 import { MatchCard } from "../matches/MatchCard";
 import { useState } from "react";
 import { clientSideApi } from "~/trpc/react";
+import type { Match } from "~/types/match";
 
 interface LatestMatchesListProps {
   className?: string;
@@ -13,13 +13,19 @@ interface LatestMatchesListProps {
 export const LatestMatchesList: React.FC<LatestMatchesListProps> = (
   props: LatestMatchesListProps,
 ) => {
-  const [num, setNumber] = useState(-1);
+  const [matches, setMatches] = useState<Match[]>([]);
 
   clientSideApi.streaming.latestMatches.useSubscription(undefined, {
-    onData(n) {
-      setNumber(n);
+    onData(newMatch) {
+      setMatches((matches) =>
+        matches.length > 3
+          ? [newMatch, ...matches.slice(0, -1)]
+          : [newMatch, ...matches],
+      );
     },
   });
+
+  console.log(matches);
 
   return (
     <div className={`${props.className}`}>
@@ -32,10 +38,9 @@ export const LatestMatchesList: React.FC<LatestMatchesListProps> = (
           </div>
           <SeasonIcon className="h-6 w-6" />
         </div>
-        {latestMatches.map((match, idx) => (
+        {matches.map((match, idx) => (
           <MatchCard match={match} key={idx} />
         ))}
-        {num}
       </div>
     </div>
   );

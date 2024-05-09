@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { PlayerInfoCard } from "~/components/players/PlayerInfoCard";
 import { PlayerStatsCard } from "~/components/players/PlayerStatsCard";
-import * as r from "rethinkdb";
+import r from "rethinkdb";
 import { latestMatches } from "~/data/matches";
 import { getConnection } from "~/server/db/db";
 import { tables } from "~/server/db/tables";
