@@ -3,10 +3,19 @@ from rapidfuzz import process, fuzz
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Event
 
-from app.utils.singleton import Singleton
+class SearchEngine:
+    _instances = {}
 
-class SearchEngine(metaclass=Singleton):
-    def __init__(self, filepath, num_workers=4):
+    def __new__(cls, filepath, search_column_name, num_workers=4):
+        if filepath not in cls._instances:
+            instance = super(SearchEngine, cls).__new__(cls)
+            cls._instances[filepath] = instance
+            instance.search_column_name = search_column_name
+            instance.init(filepath, num_workers)
+        return cls._instances[filepath]
+
+    def init(self, filepath, num_workers):
+        """Initialize a new instance if it hasn't been created for the given filepath."""
         self.df = pd.read_csv(filepath)
         self.num_workers = num_workers
         self.batches = self._create_batches()
@@ -22,9 +31,8 @@ class SearchEngine(metaclass=Singleton):
         """Perform a fuzzy search on a subset of the data."""
         if self.stop_search.is_set():
             return None
-        results = process.extractOne(query, data_subset['full_name'], scorer=fuzz.WRatio, score_cutoff=score_cutoff)
+        results = process.extractOne(query, data_subset[self.search_column_name], scorer=fuzz.WRatio, score_cutoff=score_cutoff)
         if results and results[1] >= score_cutoff:
-            # Check if the index is valid
             best_match_idx = results[2]
             if best_match_idx < len(data_subset):
                 self.stop_search.set()
