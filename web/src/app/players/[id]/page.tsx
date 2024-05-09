@@ -2,28 +2,28 @@ import Image from "next/image";
 import { PlayerInfoCard } from "~/components/players/PlayerInfoCard";
 import { PlayerStatsCard } from "~/components/players/PlayerStatsCard";
 import * as r from "rethinkdb";
-import { player1 } from "~/data/players";
 import { latestMatches } from "~/data/matches";
 import { getConnection } from "~/server/db/db";
 import { tables } from "~/server/db/tables";
 import type { Player } from "~/types/player";
 import { serverSideApi } from "~/trpc/server";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function PlayerScreen({
   params,
 }: {
   params: { id: string };
 }) {
-  const decodedId = decodeURIComponent(params.id);
+  const decodedName = decodeURIComponent(params.id);
+
   const connection = await getConnection();
 
-  const player: Player = await new Promise((resolve, reject) => {
+  const playerStatsPromise = new Promise<Player>((resolve, reject) => {
     r.table(tables.players)
-      .get(decodedId)
-      .run(connection, function (err, result) {
-        if (err) throw err;
+      .get(decodedName)
+      .run(connection, (err, result) => {
+        if (err) reject(err);
         if (!result) {
           reject(new Error("Player not found"));
         } else {
@@ -33,7 +33,24 @@ export default async function PlayerScreen({
       });
   });
 
-  const image = await serverSideApi.images.search({ playerName: player.name });
+  const imagePromise = serverSideApi.images.search({ playerName: decodedName });
+  const playerInfosPromise = serverSideApi.playerInfos.getPlayerInfos({
+    playerName: decodedName,
+  });
+
+  const [playerStats, image, playerInfos] = await Promise.all([
+    playerStatsPromise,
+    imagePromise,
+    playerInfosPromise,
+  ]);
+
+  const player = { ...playerInfos, ...playerStats };
+
+  const { url: clubLogo } = await serverSideApi.playerInfos.getClubLogo({
+    clubName: player.club ?? "",
+  });
+
+  player.clubIcon = clubLogo;
 
   return (
     <div
@@ -45,7 +62,7 @@ export default async function PlayerScreen({
         <div className="z-10 flex h-full items-center justify-between px-5">
           {/* Left Div */}
           <PlayerInfoCard
-            player={player1}
+            player={player}
             className="h-full w-1/3 py-4 text-left"
           />
 

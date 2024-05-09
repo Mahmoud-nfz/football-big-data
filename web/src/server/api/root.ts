@@ -1,6 +1,7 @@
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { imagesRouter } from "./routers/images";
 import { streamingRouter } from "./routers/streaming";
+import { playerInfosRouter } from "./routers/playerInfos";
 
 /**
  * This is the primary router for your server.
@@ -10,6 +11,7 @@ import { streamingRouter } from "./routers/streaming";
 export const appRouter = createTRPCRouter({
   images: imagesRouter,
   streaming: streamingRouter,
+  playerInfos: playerInfosRouter,
 });
 
 // export type definition of API

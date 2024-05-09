@@ -1,4 +1,11 @@
 services:
+  search-engine:
+    build: ./search
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/usr/src/data
+
   web:
     platform: "linux/amd64"
     build:
@@ -16,6 +23,8 @@ services:
       NEXT_PUBLIC_NEXT_PORT: "3000"
       NEXT_PUBLIC_WS_URL: "ws://localhost:3001"
       NEXT_PUBLIC_WS_PORT: "3001"
+      SEARCH_ENGINE_URL: "http://search-engine:5000"
+      OPENAI_API_KEY: "API-KEY"
     networks:
       - rethinkdb-net
 

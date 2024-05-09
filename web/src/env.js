@@ -22,6 +22,9 @@ export const env = createEnv({
       process.env.VERCEL ? z.string() : z.string().url(),
     ),
 
+    SEARCH_ENGINE_URL: z.string().url(),
+    OPENAI_API_KEY: z.string().optional(),
+
     DB_HOST: z.string(),
     DB_PORT: z.coerce.number(),
     DB_NAME: z.string(),
@@ -55,6 +58,8 @@ export const env = createEnv({
     NEXT_PUBLIC_NEXT_URL:
       process.env.NEXT_PUBLIC_NEXT_URL ?? "http://localhost:3000",
     NEXT_PUBLIC_WS_URL: process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:3001",
+    SEARCH_ENGINE_URL: process.env.SEARCH_ENGINE_URL,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
