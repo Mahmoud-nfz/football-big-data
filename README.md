@@ -12,6 +12,8 @@ This project is composed of 2 pipelines, one for streaming data and another for 
 
 ## How do I run this ?
 
+- You need to have Docker installed 
+
 - Run `bash start.sh` (note that if you are on windows you can run it on a git bash terminal)
 
 If running for the first time run `bash start.sh download-data` in order to download the datasets we're going to be using.
